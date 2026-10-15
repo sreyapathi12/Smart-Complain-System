@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Citizen Grievance Management System | Village/Ward Secretariat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif:wght@400;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+</head>
+<body>
+
+<!-- ===== TOP UTILITY BAR ===== -->
+<div class="utility-bar">
+  <div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="utility-left">
+        <span><i class="fas fa-phone-alt me-1"></i> Helpline: 1800-425-0004</span>
+        <span class="ms-3"><i class="fas fa-envelope me-1"></i> grievance@apgov.in</span>
+      </div>
+      <div class="utility-right d-flex align-items-center gap-3">
+        <span id="datetime-display"></span>
+        <button class="theme-toggle-btn" id="themeToggle" title="Toggle Dark/Light Mode">
+          <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+        <span class="lang-badge">తెలుగు | English</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MAIN HEADER ===== -->
+<header class="main-header">
+  <div class="container-fluid px-4">
+    <div class="d-flex align-items-center justify-content-between py-3">
+      <div class="d-flex align-items-center gap-3">
+        <div class="govt-emblem">
+          <i class="fas fa-landmark"></i>
+        </div>
+        <div class="header-title-block">
+          <div class="header-org-name">Government of Andhra Pradesh</div>
+          <div class="header-portal-name">Smart Citizen Grievance Management System</div>
+          <div class="header-sub">Village/Ward Secretariat — Citizen Services Portal</div>
+        </div>
+      </div>
+      <div class="header-logos d-flex align-items-center gap-3">
+        <div class="award-badge">
+          <i class="fas fa-award"></i>
+          <span>DigiSeva<br/>Award 2024</span>
+        </div>
+        <div class="iso-badge">
+          <i class="fas fa-certificate"></i>
+          <span>ISO 9001<br/>Certified</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ===== NAVIGATION BAR ===== -->
+<nav class="main-navbar navbar navbar-expand-lg">
+  <div class="container-fluid px-4">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="mainNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link active" href="index.html"><i class="fas fa-home me-1"></i>Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about"><i class="fas fa-info-circle me-1"></i>About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services"><i class="fas fa-cogs me-1"></i>Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="#departments"><i class="fas fa-building me-1"></i>Departments</a></li>
+        <li class="nav-item"><a class="nav-link" href="#schemes"><i class="fas fa-star me-1"></i>Schemes</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact"><i class="fas fa-phone me-1"></i>Contact</a></li>
+      </ul>
+      <div class="nav-actions d-flex gap-2">
+        <a href="#trackComplaint" class="btn btn-track" onclick="openTrackModal()">
+          <i class="fas fa-search me-1"></i> Track Complaint
+        </a>
+        <a href="#" class="btn btn-citizen-login" onclick="openLoginModal('citizen')">
+          <i class="fas fa-user me-1"></i> Citizen Login
+        </a>
+        <a href="#" class="btn btn-officer-login" onclick="openLoginModal('officer')">
+          <i class="fas fa-user-tie me-1"></i> Officer Login
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== HERO BANNER ===== -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="hero-particles" id="heroParticles"></div>
+  <div class="container-fluid px-4 position-relative">
+    <div class="row align-items-center min-vh-hero">
+      <div class="col-lg-7">
+        <div class="hero-badge-pill animate-fade-in">
+          <i class="fas fa-shield-alt me-2"></i>
+          Official Government Portal — Andhra Pradesh
+        </div>
+        <h1 class="hero-heading animate-slide-up">
+          Your Voice.<br/>
+          <span class="hero-accent">Our Responsibility.</span>
+        </h1>
+        <p class="hero-subtext animate-slide-up delay-1">
+          The Smart Citizen Grievance Management System empowers every citizen of Andhra Pradesh 
+          to raise, track, and resolve civic complaints digitally — directly with their Ward/Village Secretariat.
+        </p>
+        <div class="hero-actions animate-slide-up delay-2">
+          <button class="btn btn-hero-primary" onclick="openLoginModal('citizen')">
+            <i class="fas fa-plus-circle me-2"></i>Raise a Complaint
+          </button>
+          <button class="btn btn-hero-secondary" onclick="openTrackModal()">
+            <i class="fas fa-search me-2"></i>Track Complaint
+          </button>
+        </div>
+        <div class="hero-stats animate-fade-in delay-3">
+          <div class="hero-stat-item">
+            <span class="hero-stat-num" data-count="48250">0</span>
+            <span class="hero-stat-label">Complaints Resolved</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-num" data-count="1324">0</span>
+            <span class="hero-stat-label">Villages Connected</span>
+          </div>
+          <div class="hero-stat-divider"></div>
+          <div class="hero-stat-item">
+            <span class="hero-stat-num" data-count="98">0</span>
+            <span class="hero-stat-label">% Satisfaction Rate</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-flex justify-content-center">
+        <div class="hero-visual">
+          <div class="hero-card-float card-1">
+            <i class="fas fa-check-circle text-success"></i>
+            <span>Complaint Resolved!</span>
+          </div>
+          <div class="hero-card-float card-2">
+            <i class="fas fa-clock text-warning"></i>
+            <span>In Progress...</span>
+          </div>
+          <div class="hero-card-float card-3">
+            <i class="fas fa-bell text-info"></i>
+            <span>3 New Updates</span>
+          </div>
+          <div class="hero-main-visual">
+            <i class="fas fa-city"></i>
+            <p>Smart Secretariat</p>
+            <small>Andhra Pradesh</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none"><path d="M0,40 C360,80 1080,0 1440,40 L1440,80 L0,80 Z"/></svg>
+  </div>
+</section>
+
+<!-- ===== TICKER / NOTICE BAR ===== -->
+<div class="notice-ticker">
+  <div class="ticker-label"><i class="fas fa-bullhorn me-2"></i>NOTICE</div>
+  <div class="ticker-content">
+    <div class="ticker-text" id="tickerText">
+      🔔 New: Digital Grievance Portal launched for all wards &nbsp;|&nbsp; 
+      📢 Water supply schedule updated for Zone 3 &nbsp;|&nbsp; 
+      ✅ All road complaints from last month resolved &nbsp;|&nbsp; 
+      📅 Officer duty chart published for December 2024 &nbsp;|&nbsp; 
+      🌟 Secretariat achieves 98% resolution rate this quarter
+    </div>
+  </div>
+</div>
+
+<!-- ===== SERVICES SECTION ===== -->
+<section class="services-section py-5" id="services">
+  <div class="container-fluid px-4">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">What We Handle</div>
+      <h2 class="section-title">Citizen Services</h2>
+      <p class="section-desc">Raise complaints across 8 critical civic service departments. Every complaint is assigned, tracked, and resolved.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#1976D2">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h5>Water Supply</h5>
+          <p>Leakage, shortage, contamination, pipeline damage</p>
+          <div class="service-stat">142 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#F57C00">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h5>Electricity</h5>
+          <p>Power cuts, transformer issues, meter problems</p>
+          <div class="service-stat">98 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#388E3C">
+            <i class="fas fa-road"></i>
+          </div>
+          <h5>Roads</h5>
+          <p>Potholes, damaged roads, encroachments</p>
+          <div class="service-stat">76 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#6A1B9A">
+            <i class="fas fa-water"></i>
+          </div>
+          <h5>Drainage</h5>
+          <p>Blocked drains, overflow, sewage issues</p>
+          <div class="service-stat">63 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#00838F">
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <h5>Sanitation</h5>
+          <p>Garbage collection, waste disposal, cleanliness</p>
+          <div class="service-stat">89 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#E65100">
+            <i class="fas fa-lightbulb"></i>
+          </div>
+          <h5>Street Lights</h5>
+          <p>Non-functional lights, new light requests</p>
+          <div class="service-stat">54 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#C62828">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h5>Public Health</h5>
+          <p>Mosquito breeding, disease outbreaks, sanitation</p>
+          <div class="service-stat">37 resolved this month</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-4 col-lg-3">
+        <div class="service-card" onclick="openLoginModal('citizen')">
+          <div class="service-icon-wrap" style="--scolor:#37474F">
+            <i class="fas fa-ellipsis-h"></i>
+          </div>
+          <h5>Others</h5>
+          <p>Any civic issue not listed in other categories</p>
+          <div class="service-stat">29 resolved this month</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section py-5" id="about">
+  <div class="container-fluid px-4">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">Process</div>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-desc">A simple 4-step process to get your grievance resolved efficiently.</p>
+    </div>
+    <div class="row g-0 align-items-center justify-content-center">
+      <div class="col-md-3 col-6">
+        <div class="how-step">
+          <div class="how-step-num">01</div>
+          <div class="how-step-icon"><i class="fas fa-user-plus"></i></div>
+          <h5>Register & Login</h5>
+          <p>Create your citizen account with mobile number</p>
+        </div>
+      </div>
+      <div class="how-connector d-none d-md-block"></div>
+      <div class="col-md-3 col-6">
+        <div class="how-step">
+          <div class="how-step-num">02</div>
+          <div class="how-step-icon"><i class="fas fa-file-alt"></i></div>
+          <h5>Raise Complaint</h5>
+          <p>Submit complaint with details, location & photo</p>
+        </div>
+      </div>
+      <div class="how-connector d-none d-md-block"></div>
+      <div class="col-md-3 col-6">
+        <div class="how-step">
+          <div class="how-step-num">03</div>
+          <div class="how-step-icon"><i class="fas fa-tasks"></i></div>
+          <h5>Officer Review</h5>
+          <p>Department officer reviews and takes action</p>
+        </div>
+      </div>
+      <div class="how-connector d-none d-md-block"></div>
+      <div class="col-md-3 col-6">
+        <div class="how-step">
+          <div class="how-step-num">04</div>
+          <div class="how-step-icon"><i class="fas fa-check-double"></i></div>
+          <h5>Get Resolution</h5>
+          <p>Complaint resolved and citizen notified</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATISTICS SECTION ===== -->
+<section class="stats-section py-5">
+  <div class="container-fluid px-4">
+    <div class="stats-grid">
+      <div class="stat-card blue">
+        <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="5842">0</div>
+          <div class="stat-label">Total Complaints</div>
+        </div>
+      </div>
+      <div class="stat-card green">
+        <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="4210">0</div>
+          <div class="stat-label">Resolved</div>
+        </div>
+      </div>
+      <div class="stat-card yellow">
+        <div class="stat-icon"><i class="fas fa-spinner"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="932">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+      </div>
+      <div class="stat-card red">
+        <div class="stat-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="700">0</div>
+          <div class="stat-label">Pending</div>
+        </div>
+      </div>
+      <div class="stat-card indigo">
+        <div class="stat-icon"><i class="fas fa-users"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="12480">0</div>
+          <div class="stat-label">Registered Citizens</div>
+        </div>
+      </div>
+      <div class="stat-card teal">
+        <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+        <div class="stat-body">
+          <div class="stat-num" data-count="85">0</div>
+          <div class="stat-label">Active Officers</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== NOTICE BOARD ===== -->
+<section class="notice-section py-5">
+  <div class="container-fluid px-4">
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="notice-board">
+          <div class="notice-board-header">
+            <i class="fas fa-thumbtack me-2"></i>Notice Board
+            <span class="badge-new ms-2">Live</span>
+          </div>
+          <div class="notice-list" id="noticeList">
+            <div class="notice-item urgent">
+              <div class="notice-date">15 Dec 2024</div>
+              <div class="notice-content">
+                <span class="notice-tag urgent-tag">URGENT</span>
+                Water supply will be suspended in Wards 4, 7, 9 on Dec 16 for pipeline maintenance from 6 AM to 6 PM.
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date">14 Dec 2024</div>
+              <div class="notice-content">
+                <span class="notice-tag info-tag">INFO</span>
+                Monthly Grievance Camp scheduled on 20th December at Secretariat Hall. All pending issues will be addressed in person.
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date">12 Dec 2024</div>
+              <div class="notice-content">
+                <span class="notice-tag success-tag">RESOLVED</span>
+                Road repair work completed on Main Road, Ward 2. 23 complaints have been marked resolved.
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date">10 Dec 2024</div>
+              <div class="notice-content">
+                <span class="notice-tag info-tag">INFO</span>
+                New sanitation drive launched across all 15 wards under Swachh Bharat Mission. 
+              </div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-date">08 Dec 2024</div>
+              <div class="notice-content">
+                <span class="notice-tag warning-tag">NOTICE</span>
+                Street light installation work in progress for Colony Road. Expected completion by Dec 25.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="quick-access-card">
+          <div class="qa-header"><i class="fas fa-bolt me-2"></i>Quick Access</div>
+          <div class="qa-list">
+            <button class="qa-btn" onclick="openLoginModal('citizen')">
+              <i class="fas fa-plus-circle"></i>
+              <span>Raise New Complaint</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+            <button class="qa-btn" onclick="openTrackModal()">
+              <i class="fas fa-search"></i>
+              <span>Track Complaint Status</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+            <button class="qa-btn" onclick="openLoginModal('citizen')">
+              <i class="fas fa-list-alt"></i>
+              <span>My Complaints</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+            <button class="qa-btn" onclick="openLoginModal('officer')">
+              <i class="fas fa-user-shield"></i>
+              <span>Officer Portal</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+            <button class="qa-btn">
+              <i class="fas fa-download"></i>
+              <span>Download Forms</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+            <button class="qa-btn">
+              <i class="fas fa-phone-volume"></i>
+              <span>Helpline Numbers</span>
+              <i class="fas fa-chevron-right qa-arrow"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== GOVERNMENT SCHEMES ===== -->
+<section class="schemes-section py-5" id="schemes">
+  <div class="container-fluid px-4">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">Government of Andhra Pradesh</div>
+      <h2 class="section-title">Flagship Schemes</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 col-lg-2dot4">
+        <div class="scheme-card">
+          <div class="scheme-icon" style="background:#E3F2FD;color:#1565C0"><i class="fas fa-home"></i></div>
+          <h6>YSR Housing</h6>
+          <small>Housing for All</small>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-2dot4">
+        <div class="scheme-card">
+          <div class="scheme-icon" style="background:#E8F5E9;color:#2E7D32"><i class="fas fa-hand-holding-usd"></i></div>
+          <h6>Rythu Bharosa</h6>
+          <small>Farmer Support</small>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-2dot4">
+        <div class="scheme-card">
+          <div class="scheme-icon" style="background:#FFF3E0;color:#E65100"><i class="fas fa-hospital-alt"></i></div>
+          <h6>YSR Aarogyasri</h6>
+          <small>Health Coverage</small>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-2dot4">
+        <div class="scheme-card">
+          <div class="scheme-icon" style="background:#FCE4EC;color:#AD1457"><i class="fas fa-graduation-cap"></i></div>
+          <h6>Jagananna Vidya</h6>
+          <small>Education Support</small>
+        </div>
+      </div>
+      <div class="col-md-4 col-lg-2dot4">
+        <div class="scheme-card">
+          <div class="scheme-icon" style="background:#EDE7F6;color:#4527A0"><i class="fas fa-tint"></i></div>
+          <h6>Jal Jeevan</h6>
+          <small>Safe Drinking Water</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DEPARTMENTS ===== -->
+<section class="departments-section py-5" id="departments">
+  <div class="container-fluid px-4">
+    <div class="section-header text-center mb-5">
+      <div class="section-eyebrow">Contact Information</div>
+      <h2 class="section-title">Department Contacts</h2>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon water"><i class="fas fa-tint"></i></div>
+          <div class="dept-info">
+            <h6>Water Supply Department</h6>
+            <p><i class="fas fa-user me-1"></i>Sri K. Ramesh Kumar — Water Officer</p>
+            <p><i class="fas fa-phone me-1"></i>9848012345</p>
+            <p><i class="fas fa-envelope me-1"></i>water.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon electricity"><i class="fas fa-bolt"></i></div>
+          <div class="dept-info">
+            <h6>Electricity Department</h6>
+            <p><i class="fas fa-user me-1"></i>Sri M. Nagaraju — Electricity Officer</p>
+            <p><i class="fas fa-phone me-1"></i>9848023456</p>
+            <p><i class="fas fa-envelope me-1"></i>electricity.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon roads"><i class="fas fa-road"></i></div>
+          <div class="dept-info">
+            <h6>Roads & Infrastructure</h6>
+            <p><i class="fas fa-user me-1"></i>Sri P. Venkatesh — Roads Officer</p>
+            <p><i class="fas fa-phone me-1"></i>9848034567</p>
+            <p><i class="fas fa-envelope me-1"></i>roads.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon sanitation"><i class="fas fa-trash-alt"></i></div>
+          <div class="dept-info">
+            <h6>Sanitation Department</h6>
+            <p><i class="fas fa-user me-1"></i>Smt. L. Padmavathi — Sanitation Officer</p>
+            <p><i class="fas fa-phone me-1"></i>9848045678</p>
+            <p><i class="fas fa-envelope me-1"></i>sanitation.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon health"><i class="fas fa-heartbeat"></i></div>
+          <div class="dept-info">
+            <h6>Public Health Department</h6>
+            <p><i class="fas fa-user me-1"></i>Dr. S. Vijayalakshmi — Health Officer</p>
+            <p><i class="fas fa-phone me-1"></i>9848056789</p>
+            <p><i class="fas fa-envelope me-1"></i>health.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-4">
+        <div class="dept-card">
+          <div class="dept-icon general"><i class="fas fa-building"></i></div>
+          <div class="dept-info">
+            <h6>General Administration</h6>
+            <p><i class="fas fa-user me-1"></i>Sri T. Suresh Babu — Ward Secretary</p>
+            <p><i class="fas fa-phone me-1"></i>9848067890</p>
+            <p><i class="fas fa-envelope me-1"></i>admin.ward1@apgov.in</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="main-footer" id="contact">
+  <div class="footer-top">
+    <div class="container-fluid px-4">
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="footer-brand">
+            <div class="d-flex align-items-center gap-3 mb-3">
+              <div class="footer-emblem"><i class="fas fa-landmark"></i></div>
+              <div>
+                <div class="footer-title">Smart Grievance System</div>
+                <div class="footer-subtitle">Village/Ward Secretariat</div>
+              </div>
+            </div>
+            <p class="footer-desc">An initiative by the Government of Andhra Pradesh to digitize citizen grievance management and ensure transparent, efficient resolution of civic issues.</p>
+            <div class="footer-socials">
+              <a href="#"><i class="fab fa-twitter"></i></a>
+              <a href="#"><i class="fab fa-facebook"></i></a>
+              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="#"><i class="fab fa-whatsapp"></i></a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <h6 class="footer-heading">Quick Links</h6>
+          <ul class="footer-links">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Portal</a></li>
+            <li><a href="#">Raise Complaint</a></li>
+            <li><a href="#">Track Status</a></li>
+            <li><a href="#">Reports</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-lg-2">
+          <h6 class="footer-heading">Services</h6>
+          <ul class="footer-links">
+            <li><a href="#">Water Supply</a></li>
+            <li><a href="#">Electricity</a></li>
+            <li><a href="#">Roads</a></li>
+            <li><a href="#">Sanitation</a></li>
+            <li><a href="#">Health</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4 col-lg-4">
+          <h6 class="footer-heading">Contact Us</h6>
+          <ul class="footer-contact">
+            <li><i class="fas fa-map-marker-alt"></i>Ward Secretariat, Main Road,<br/> Vijayawada, AP - 520001</li>
+            <li><i class="fas fa-phone-alt"></i>1800-425-0004 (Toll Free)</li>
+            <li><i class="fas fa-envelope"></i>grievance@apgov.in</li>
+            <li><i class="fas fa-clock"></i>Mon–Sat: 9:00 AM – 5:00 PM</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container-fluid px-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center">
+        <p>© 2024 Government of Andhra Pradesh. All Rights Reserved.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Use</a>
+          <a href="#">Sitemap</a>
+          <a href="#">Accessibility</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== CITIZEN LOGIN MODAL ===== -->
+<div class="modal fade" id="citizenLoginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content login-modal">
+      <div class="modal-header login-modal-header citizen-header">
+        <div class="login-modal-title">
+          <i class="fas fa-user-circle me-2"></i>Citizen Login
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="login-welcome">Welcome! Please sign in to your account.</div>
+        <div id="citizenLoginError" class="alert alert-danger d-none"></div>
+        <div class="mb-3">
+          <label class="form-label">Mobile Number / Email</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" id="citizenUsername" placeholder="Enter mobile or email"/>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="citizenPassword" placeholder="Enter password"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('citizenPassword', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="d-flex justify-content-between mb-3">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="rememberCitizen"/>
+            <label class="form-check-label" for="rememberCitizen">Remember me</label>
+          </div>
+          <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+        <button class="btn btn-login-submit w-100" onclick="loginCitizen()">
+          <i class="fas fa-sign-in-alt me-2"></i>Login
+        </button>
+        <div class="login-divider"><span>Demo Credentials</span></div>
+        <div class="demo-creds">
+          <div class="demo-cred-row">
+            <span><i class="fas fa-mobile-alt me-1"></i>9876543210</span>
+            <span><i class="fas fa-key me-1"></i>citizen123</span>
+            <button class="btn btn-sm btn-demo-fill" onclick="fillCitizenDemo()">Use</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== OFFICER LOGIN MODAL ===== -->
+<div class="modal fade" id="officerLoginModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content login-modal">
+      <div class="modal-header login-modal-header officer-header">
+        <div class="login-modal-title">
+          <i class="fas fa-user-tie me-2"></i>Officer Login
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="login-welcome">Officer Portal — Authorised Personnel Only</div>
+        <div id="officerLoginError" class="alert alert-danger d-none"></div>
+        <div class="mb-3">
+          <label class="form-label">Officer ID</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+            <input type="text" class="form-control" id="officerUsername" placeholder="Enter Officer ID"/>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="officerPassword" placeholder="Enter password"/>
+            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('officerPassword', this)">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Select Department</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-building"></i></span>
+            <select class="form-select" id="officerDept">
+              <option value="">-- Select Department --</option>
+              <option value="Water Supply">Water Supply</option>
+              <option value="Electricity">Electricity</option>
+              <option value="Roads">Roads</option>
+              <option value="Drainage">Drainage</option>
+              <option value="Sanitation">Sanitation</option>
+              <option value="Street Lights">Street Lights</option>
+              <option value="Public Health">Public Health</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-login-submit officer-submit w-100" onclick="loginOfficer()">
+          <i class="fas fa-sign-in-alt me-2"></i>Login
+        </button>
+        <div class="login-divider"><span>Demo Credentials</span></div>
+        <div class="demo-creds">
+          <div class="demo-cred-row">
+            <span><i class="fas fa-id-badge me-1"></i>WTR001</span>
+            <span><i class="fas fa-key me-1"></i>officer123</span>
+            <button class="btn btn-sm btn-demo-fill" onclick="fillOfficerDemo()">Use</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRACK COMPLAINT MODAL ===== -->
+<div class="modal fade" id="trackModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content login-modal">
+      <div class="modal-header login-modal-header" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">
+        <div class="login-modal-title">
+          <i class="fas fa-search me-2"></i>Track Your Complaint
+        </div>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body p-4">
+        <div class="mb-3">
+          <label class="form-label">Enter Complaint ID</label>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+            <input type="text" class="form-control" id="trackInput" placeholder="e.g. GRV-2024-0001"/>
+            <button class="btn btn-primary" onclick="trackComplaint()">Search</button>
+          </div>
+        </div>
+        <div id="trackResult"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SCROLL TO TOP ===== -->
+<button class="scroll-top-btn" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fas fa-arrow-up"></i>
+</button>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

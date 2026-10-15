@@ -1,0 +1,227 @@
+/* ============================================
+   OFFICER DASHBOARD — officer.css
+   Smart Grievance Management System
+   ============================================ */
+
+/* ---- OFFICER THEME OVERRIDES ---- */
+.officer-theme {
+  --sidebar-bg: #0A1628;
+}
+.officer-sidebar .sidebar-logo {
+  background: linear-gradient(135deg, #1B5E20, #2E7D32);
+}
+.officer-sb-header {
+  background: rgba(0,0,0,0.4) !important;
+}
+.officer-topbar {
+  border-bottom-color: rgba(27,94,32,0.25) !important;
+}
+.officer-chip {
+  background: var(--success-light) !important;
+  border-color: rgba(46,125,50,0.3) !important;
+}
+.officer-chip i { color: var(--success) !important; }
+.officer-avatar { color: rgba(255,255,255,0.4); }
+
+/* ---- OFFICER ID BADGE ---- */
+.officer-id-badge {
+  display: inline-block;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+}
+
+/* ---- DEPT TAG ---- */
+.dept-tag {
+  display: inline-flex;
+  align-items: center;
+  background: var(--success-light);
+  color: var(--success);
+  border: 1.5px solid rgba(46,125,50,0.3);
+  border-radius: 30px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+}
+[data-theme="dark"] .dept-tag {
+  background: rgba(46,125,50,0.15);
+  border-color: rgba(46,125,50,0.4);
+}
+
+/* ---- OFFICER TABLE ACTIONS ---- */
+.officer-table tbody td { font-size: 12.5px; }
+.officer-actions {
+  display: flex; gap: 6px; align-items: center; flex-wrap: nowrap;
+}
+.btn-action-sm {
+  padding: 4px 10px; font-size: 11px; font-weight: 600;
+  border-radius: var(--radius-sm); border: none; cursor: pointer;
+  white-space: nowrap; transition: all 0.15s;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.btn-action-view     { background: var(--primary-pale);   color: var(--primary); border: 1px solid rgba(21,101,192,0.2); }
+.btn-action-progress { background: var(--warning-light);  color: var(--warning); border: 1px solid rgba(245,127,23,0.3); }
+.btn-action-resolve  { background: var(--success-light);  color: var(--success); border: 1px solid rgba(46,125,50,0.3); }
+.btn-action-remark   { background: var(--info-light);     color: var(--info);    border: 1px solid rgba(1,87,155,0.2); }
+.btn-action-view:hover     { background: var(--primary); color: #fff; }
+.btn-action-progress:hover { background: var(--warning); color: #fff; }
+.btn-action-resolve:hover  { background: var(--success); color: #fff; }
+.btn-action-remark:hover   { background: var(--info); color: #fff; }
+
+/* ---- ACTION MODAL ---- */
+.officer-modal-header {
+  background: linear-gradient(135deg, #1B5E20, #2E7D32);
+  color: #fff; border: none;
+}
+.complaint-info-block {
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.complaint-info-block .cib-row {
+  display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.complaint-info-block .cib-field { flex: 1; min-width: 130px; }
+.complaint-info-block .cib-label {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--text-muted); margin-bottom: 3px;
+}
+.complaint-info-block .cib-value {
+  font-size: 13px; font-weight: 600; color: var(--text-primary);
+}
+.complaint-description-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.7; max-height: 100px;
+  overflow-y: auto; margin-top: 6px;
+}
+.remarks-input {
+  font-size: 13px; resize: vertical; min-height: 80px;
+}
+
+/* ---- RESOLUTION RATE LABEL ---- */
+.resolution-rate-label {
+  font-size: 28px; font-weight: 800;
+  color: var(--success);
+  margin-top: -10px; margin-bottom: 8px;
+}
+
+/* ---- REPORT SUMMARY TABLE ---- */
+.report-summary-table {
+  width: 100%; border-collapse: collapse;
+}
+.report-summary-table thead th {
+  background: var(--surface);
+  font-size: 12px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--text-muted); padding: 12px 16px;
+  border-bottom: 1.5px solid var(--border);
+}
+.report-summary-table tbody td {
+  padding: 12px 16px; font-size: 13px;
+  border-bottom: 1px solid var(--border-light);
+  color: var(--text-primary);
+}
+.report-summary-table tbody tr:hover td { background: var(--surface); }
+.report-summary-table tbody tr:last-child td { border-bottom: none; font-weight: 700; }
+
+/* ---- DEPT PERFORMANCE MINI BARS ---- */
+.perf-bar-wrap { margin-bottom: 10px; }
+.perf-bar-label {
+  display: flex; justify-content: space-between;
+  font-size: 12px; font-weight: 600; margin-bottom: 4px;
+  color: var(--text-secondary);
+}
+.perf-bar-track {
+  height: 8px; background: var(--border);
+  border-radius: 4px; overflow: hidden;
+}
+.perf-bar-fill {
+  height: 100%; border-radius: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--primary-light));
+  transition: width 1s ease;
+}
+.perf-bar-fill.green { background: linear-gradient(90deg, #2E7D32, #66BB6A); }
+.perf-bar-fill.yellow { background: linear-gradient(90deg, #F57F17, #FFD54F); }
+.perf-bar-fill.red { background: linear-gradient(90deg, #C62828, #EF5350); }
+
+/* ---- PRINT BUTTON ---- */
+.btn-print {
+  background: var(--surface); border: 1.5px solid var(--border);
+  color: var(--text-secondary); font-size: 12px;
+  border-radius: var(--radius-sm);
+}
+.btn-print:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+/* ---- OFFICER PROFILE ---- */
+.officer-profile-header {
+  background: linear-gradient(135deg, #F1F8E9, #E8F5E9);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.officer-avatar-big { font-size: 64px; color: var(--success); }
+[data-theme="dark"] .officer-profile-header {
+  background: rgba(46,125,50,0.1);
+}
+
+/* ---- NOTIFICATION TOAST ---- */
+.officer-toast-container {
+  position: fixed; top: 80px; right: 20px;
+  z-index: 9999; display: flex; flex-direction: column; gap: 8px;
+}
+.officer-toast {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  box-shadow: var(--shadow-lg);
+  display: flex; align-items: flex-start; gap: 12px;
+  min-width: 280px; max-width: 320px;
+  animation: toastIn 0.3s ease;
+}
+.officer-toast.success { border-left: 4px solid var(--success); }
+.officer-toast.warning { border-left: 4px solid var(--warning); }
+.officer-toast.info    { border-left: 4px solid var(--primary); }
+.toast-icon { font-size: 18px; flex-shrink: 0; margin-top: 2px; }
+.toast-msg { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+.toast-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.toast-close { margin-left: auto; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 12px; }
+@keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+/* ---- TREND SECTION LABELS ---- */
+.chart-legend-row {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  justify-content: center; margin-top: 12px;
+}
+.chart-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-secondary);
+}
+.chart-legend-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 768px) {
+  .officer-actions { flex-wrap: wrap; }
+  .btn-action-sm { padding: 4px 8px; font-size: 10px; }
+  .officer-profile-header { flex-direction: column; gap: 12px; }
+}
+
+@media print {
+  .sidebar, .dash-topbar, .btn-print, .filter-bar { display: none !important; }
+  .main-content { margin-left: 0 !important; }
+  .dash-panel { box-shadow: none !important; border: 1px solid #ddd !important; }
+}

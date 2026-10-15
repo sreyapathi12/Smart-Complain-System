@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Officer Dashboard — Smart Grievance System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/officer.css"/>
+</head>
+<body class="dashboard-body officer-theme">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar officer-sidebar" id="sidebar">
+  <div class="sidebar-header officer-sb-header">
+    <div class="sidebar-logo"><i class="fas fa-user-tie"></i></div>
+    <div class="sidebar-title">
+      <span class="sidebar-portal">Grievance Portal</span>
+      <span class="sidebar-role">Officer Panel</span>
+    </div>
+    <button class="sidebar-close d-lg-none" onclick="toggleSidebar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-profile">
+    <div class="sidebar-avatar officer-avatar">
+      <i class="fas fa-user-shield"></i>
+    </div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="officerSidebarName">Officer</div>
+      <div class="sidebar-user-id" id="officerSidebarDept">Department</div>
+      <div class="officer-id-badge" id="officerSidebarId">ID: ——</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-label">Navigation</div>
+    <a href="#" class="sidebar-link active" onclick="showOfficerSection('dashboard')">
+      <i class="fas fa-th-large"></i><span>Dashboard</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showOfficerSection('complaints')">
+      <i class="fas fa-tasks"></i><span>My Complaints</span>
+      <span class="sidebar-badge" id="newComplaintsBadge">0</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showOfficerSection('all-complaints')">
+      <i class="fas fa-clipboard-list"></i><span>All Complaints</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showOfficerSection('reports')">
+      <i class="fas fa-chart-bar"></i><span>Reports</span>
+    </a>
+    <div class="sidebar-nav-label mt-3">Account</div>
+    <a href="#" class="sidebar-link" onclick="showOfficerSection('profile')">
+      <i class="fas fa-id-card"></i><span>My Profile</span>
+    </a>
+    <a href="index.html" class="sidebar-link logout-link" onclick="logoutOfficer()">
+      <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <small>Smart Grievance System v1.0</small><br/>
+    <small>Govt. of Andhra Pradesh</small>
+  </div>
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content" id="mainContent">
+
+  <!-- Top Navbar -->
+  <div class="dash-topbar officer-topbar">
+    <div class="topbar-left">
+      <button class="topbar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-breadcrumb">
+        <span id="officerBreadcrumb">Officer Dashboard</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-datetime" id="officerTopbarDatetime"></div>
+      <button class="topbar-btn theme-toggle-btn" id="themeToggle3">
+        <i class="fas fa-moon" id="themeIcon3"></i>
+      </button>
+      <div class="dept-chip" id="officerDeptChip">
+        <i class="fas fa-building me-1"></i><span id="officerDeptLabel">Dept</span>
+      </div>
+      <div class="topbar-user-chip officer-chip">
+        <i class="fas fa-user-shield"></i>
+        <span id="officerTopbarName">Officer</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== OFFICER DASHBOARD SECTION ===== -->
+  <div class="dash-section" id="sec-dashboard">
+    <div class="dash-page-header">
+      <div>
+        <h4 class="dash-page-title">Officer Dashboard</h4>
+        <p class="dash-page-sub">Welcome, <span id="officerWelcomeName">Officer</span>. Here's your department overview.</p>
+      </div>
+      <div class="dept-tag" id="officerDeptTag">
+        <i class="fas fa-building me-1"></i><span id="officerDeptTagText">Department</span>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-row">
+      <div class="dash-card blue-card">
+        <div class="dash-card-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="officerTotalCount">0</div>
+          <div class="dash-card-label">Total Assigned</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-inbox"></i> Your Dept</div>
+      </div>
+      <div class="dash-card red-card">
+        <div class="dash-card-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="officerPendingCount">0</div>
+          <div class="dash-card-label">Pending</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-clock"></i> Needs Action</div>
+      </div>
+      <div class="dash-card yellow-card">
+        <div class="dash-card-icon"><i class="fas fa-spinner"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="officerInProgressCount">0</div>
+          <div class="dash-card-label">In Progress</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-tools"></i> Working</div>
+      </div>
+      <div class="dash-card green-card">
+        <div class="dash-card-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="officerResolvedCount">0</div>
+          <div class="dash-card-label">Resolved</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-thumbs-up"></i> Completed</div>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row g-4 mt-2">
+      <div class="col-lg-8">
+        <div class="dash-panel">
+          <div class="panel-header">
+            <h5><i class="fas fa-chart-bar me-2"></i>Complaint Status Overview</h5>
+          </div>
+          <div class="panel-body">
+            <canvas id="officerStatusChart" height="120"></canvas>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="dash-panel">
+          <div class="panel-header">
+            <h5><i class="fas fa-chart-pie me-2"></i>Resolution Rate</h5>
+          </div>
+          <div class="panel-body text-center">
+            <canvas id="officerDoughnutChart" height="190"></canvas>
+            <div class="resolution-rate-label" id="resolutionRateLabel">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Dept Complaints -->
+    <div class="dash-panel mt-4">
+      <div class="panel-header">
+        <h5><i class="fas fa-list me-2"></i>Recent Department Complaints</h5>
+        <button class="btn btn-sm btn-view-all" onclick="showOfficerSection('complaints')">View All</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table dash-table">
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Citizen</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="officerRecentTable">
+              <tr><td colspan="6" class="text-center py-4 text-muted">No complaints yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MY COMPLAINTS (DEPT FILTERED) ===== -->
+  <div class="dash-section d-none" id="sec-complaints">
+    <div class="dash-page-header">
+      <div>
+        <h4 class="dash-page-title">Department Complaints</h4>
+        <p class="dash-page-sub">Showing complaints assigned to your department only.</p>
+      </div>
+      <div class="dept-tag" id="officerDeptTag2">
+        <i class="fas fa-filter me-1"></i><span id="officerDeptTagText2">Filtered by Dept</span>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar mb-4">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-5">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="officerSearchInput" placeholder="Search by ID, citizen name, location..." oninput="filterOfficerComplaints()"/>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="officerStatusFilter" onchange="filterOfficerComplaints()">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-clear-filter w-100" onclick="clearOfficerFilters()">
+            <i class="fas fa-times me-1"></i>Clear
+          </button>
+        </div>
+        <div class="col-md-2 text-end">
+          <span class="total-badge" id="officerComplaintCount">0 items</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-panel">
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table dash-table officer-table">
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Citizen Name</th>
+                <th>Location</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="officerComplaintsBody">
+              <tr><td colspan="7" class="text-center py-5 text-muted">
+                <i class="fas fa-inbox fa-2x mb-2 d-block"></i>No complaints in your department
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ALL COMPLAINTS SECTION ===== -->
+  <div class="dash-section d-none" id="sec-all-complaints">
+    <div class="dash-page-header">
+      <h4 class="dash-page-title">All Complaints — System Wide</h4>
+      <p class="dash-page-sub">Read-only view of all complaints across all departments.</p>
+    </div>
+
+    <div class="filter-bar mb-4">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="allSearchInput" placeholder="Search all complaints..." oninput="filterAllComplaints()"/>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="allStatusFilter" onchange="filterAllComplaints()">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="allCategoryFilter" onchange="filterAllComplaints()">
+            <option value="">All Categories</option>
+            <option>Water Supply</option>
+            <option>Electricity</option>
+            <option>Roads</option>
+            <option>Drainage</option>
+            <option>Sanitation</option>
+            <option>Street Lights</option>
+            <option>Public Health</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-clear-filter w-100" onclick="clearAllFilters()">
+            <i class="fas fa-times me-1"></i>Clear
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-panel">
+      <div class="panel-header">
+        <h5><i class="fas fa-globe me-2"></i>All Complaints</h5>
+        <span class="total-badge" id="allComplaintCount">0 complaints</span>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table dash-table">
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Citizen</th>
+                <th>Category</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>View</th>
+              </tr>
+            </thead>
+            <tbody id="allComplaintsBody">
+              <tr><td colspan="7" class="text-center py-4 text-muted">No data</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== REPORTS SECTION ===== -->
+  <div class="dash-section d-none" id="sec-reports">
+    <div class="dash-page-header">
+      <h4 class="dash-page-title">Reports & Analytics</h4>
+      <p class="dash-page-sub">Statistical overview of your department's performance.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-6">
+        <div class="dash-panel">
+          <div class="panel-header"><h5><i class="fas fa-chart-bar me-2"></i>Category-wise Complaints</h5></div>
+          <div class="panel-body"><canvas id="categoryChart" height="200"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="dash-panel">
+          <div class="panel-header"><h5><i class="fas fa-chart-pie me-2"></i>Status Distribution</h5></div>
+          <div class="panel-body"><canvas id="statusDistChart" height="200"></canvas></div>
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="dash-panel">
+          <div class="panel-header"><h5><i class="fas fa-chart-line me-2"></i>Monthly Trend</h5></div>
+          <div class="panel-body"><canvas id="trendChart" height="100"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Report Summary Table -->
+    <div class="dash-panel mt-4">
+      <div class="panel-header">
+        <h5><i class="fas fa-table me-2"></i>Department Report Summary</h5>
+        <button class="btn btn-sm btn-print" onclick="window.print()">
+          <i class="fas fa-print me-1"></i>Print Report
+        </button>
+      </div>
+      <div class="panel-body" id="reportSummaryTable"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE SECTION ===== -->
+  <div class="dash-section d-none" id="sec-profile">
+    <div class="dash-page-header">
+      <h4 class="dash-page-title">Officer Profile</h4>
+    </div>
+    <div class="form-panel">
+      <div class="profile-header-block officer-profile-header">
+        <div class="profile-avatar-big officer-avatar-big">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="profile-header-info">
+          <h5 id="officerProfileName">Officer Name</h5>
+          <p id="officerProfileDept">Department: ——</p>
+          <p id="officerProfileId">Officer ID: ——</p>
+          <span class="badge bg-warning text-dark">Active Officer</span>
+        </div>
+      </div>
+      <hr/>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Officer Name</label>
+          <input type="text" class="form-control" id="officerNameInput"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Department</label>
+          <input type="text" class="form-control" id="officerDeptInput" readonly/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Officer ID</label>
+          <input type="text" class="form-control" id="officerIdInput" readonly/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Contact Number</label>
+          <input type="tel" class="form-control" id="officerContactInput" placeholder="Official contact"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-control" id="officerEmailInput" placeholder="Official email"/>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-submit-complaint" onclick="saveOfficerProfile()">
+            <i class="fas fa-save me-2"></i>Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACTION MODAL (Remarks + Status Change) ===== -->
+<div class="modal fade" id="actionModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header officer-modal-header">
+        <h5 class="modal-title"><i class="fas fa-tasks me-2"></i>Manage Complaint</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="actionModalBody">
+        <!-- filled by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button class="btn btn-warning" onclick="markInProgress()">
+          <i class="fas fa-spinner me-1"></i>Mark In Progress
+        </button>
+        <button class="btn btn-success" onclick="markResolved()">
+          <i class="fas fa-check me-1"></i>Mark Resolved
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/officer.js"></script>
+</body>
+</html>

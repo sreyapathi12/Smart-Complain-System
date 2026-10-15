@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Citizen Dashboard — Smart Grievance System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/citizen.css"/>
+</head>
+<body class="dashboard-body">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      <i class="fas fa-landmark"></i>
+    </div>
+    <div class="sidebar-title">
+      <span class="sidebar-portal">Grievance Portal</span>
+      <span class="sidebar-role">Citizen Panel</span>
+    </div>
+    <button class="sidebar-close d-lg-none" onclick="toggleSidebar()">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <div class="sidebar-profile">
+    <div class="sidebar-avatar">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="sidebarUserName">Citizen</div>
+      <div class="sidebar-user-id" id="sidebarUserId">Mobile: ——</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-label">Main Menu</div>
+    <a href="#" class="sidebar-link active" onclick="showSection('dashboard')">
+      <i class="fas fa-th-large"></i><span>Dashboard</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('raise')">
+      <i class="fas fa-plus-circle"></i><span>Raise Complaint</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('mycomplaints')">
+      <i class="fas fa-list-alt"></i><span>My Complaints</span>
+      <span class="sidebar-badge" id="pendingBadge">0</span>
+    </a>
+    <a href="#" class="sidebar-link" onclick="showSection('track')">
+      <i class="fas fa-search-location"></i><span>Track Complaint</span>
+    </a>
+    <div class="sidebar-nav-label mt-3">Account</div>
+    <a href="#" class="sidebar-link" onclick="showSection('profile')">
+      <i class="fas fa-user-cog"></i><span>My Profile</span>
+    </a>
+    <a href="index.html" class="sidebar-link logout-link" onclick="logoutCitizen()">
+      <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <small>Smart Grievance System v1.0</small><br/>
+    <small>Govt. of Andhra Pradesh</small>
+  </div>
+</aside>
+
+<!-- ===== SIDEBAR OVERLAY ===== -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content" id="mainContent">
+
+  <!-- Top Navbar -->
+  <div class="dash-topbar">
+    <div class="topbar-left">
+      <button class="topbar-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <div class="topbar-breadcrumb">
+        <span id="breadcrumbText">Dashboard</span>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-datetime" id="topbarDatetime"></div>
+      <button class="topbar-btn theme-toggle-btn" id="themeToggle2">
+        <i class="fas fa-moon" id="themeIcon2"></i>
+      </button>
+      <div class="topbar-notif" onclick="showSection('mycomplaints')">
+        <i class="fas fa-bell"></i>
+        <span class="notif-dot" id="notifDot"></span>
+      </div>
+      <div class="topbar-user-chip">
+        <i class="fas fa-user-circle"></i>
+        <span id="topbarUserName">Citizen</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD SECTION ===== -->
+  <div class="dash-section" id="sec-dashboard">
+    <div class="dash-page-header">
+      <div>
+        <h4 class="dash-page-title">Welcome Back, <span id="welcomeName">Citizen</span>!</h4>
+        <p class="dash-page-sub">Here's an overview of your complaints.</p>
+      </div>
+      <button class="btn btn-raise-complaint" onclick="showSection('raise')">
+        <i class="fas fa-plus me-2"></i>Raise New Complaint
+      </button>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="stats-row">
+      <div class="dash-card blue-card">
+        <div class="dash-card-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="totalCount">0</div>
+          <div class="dash-card-label">Total Complaints</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-arrow-up"></i> All time</div>
+      </div>
+      <div class="dash-card red-card">
+        <div class="dash-card-icon"><i class="fas fa-exclamation-circle"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="pendingCount">0</div>
+          <div class="dash-card-label">Pending</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-clock"></i> Awaiting</div>
+      </div>
+      <div class="dash-card yellow-card">
+        <div class="dash-card-icon"><i class="fas fa-spinner"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="inprogressCount">0</div>
+          <div class="dash-card-label">In Progress</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-tools"></i> Active</div>
+      </div>
+      <div class="dash-card green-card">
+        <div class="dash-card-icon"><i class="fas fa-check-circle"></i></div>
+        <div class="dash-card-body">
+          <div class="dash-card-num" id="resolvedCount">0</div>
+          <div class="dash-card-label">Resolved</div>
+        </div>
+        <div class="dash-card-trend"><i class="fas fa-thumbs-up"></i> Done</div>
+      </div>
+    </div>
+
+    <!-- Recent Complaints Table -->
+    <div class="dash-panel mt-4">
+      <div class="panel-header">
+        <h5><i class="fas fa-history me-2"></i>Recent Complaints</h5>
+        <button class="btn btn-sm btn-view-all" onclick="showSection('mycomplaints')">View All</button>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table dash-table">
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Category</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentComplaintsTable">
+              <tr><td colspan="5" class="text-center py-4 text-muted">No complaints yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info Cards Row -->
+    <div class="row g-3 mt-2">
+      <div class="col-md-6">
+        <div class="info-card">
+          <h6><i class="fas fa-phone-volume me-2 text-primary"></i>Helpline Numbers</h6>
+          <div class="helpline-list">
+            <div class="helpline-item"><span>General</span><strong>1800-425-0004</strong></div>
+            <div class="helpline-item"><span>Water</span><strong>9848012345</strong></div>
+            <div class="helpline-item"><span>Electricity</span><strong>9848023456</strong></div>
+            <div class="helpline-item"><span>Health</span><strong>104</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="info-card">
+          <h6><i class="fas fa-info-circle me-2 text-primary"></i>Tips for Faster Resolution</h6>
+          <ul class="tips-list">
+            <li>Add exact location with landmark</li>
+            <li>Upload a clear photograph</li>
+            <li>Provide correct contact number</li>
+            <li>Give detailed description of the issue</li>
+            <li>Check status regularly via Track feature</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== RAISE COMPLAINT SECTION ===== -->
+  <div class="dash-section d-none" id="sec-raise">
+    <div class="dash-page-header">
+      <div>
+        <h4 class="dash-page-title">Raise a Complaint</h4>
+        <p class="dash-page-sub">Fill in the details below. Fields marked * are mandatory.</p>
+      </div>
+    </div>
+
+    <div class="form-panel">
+      <div id="formSuccessAlert" class="alert alert-success d-none">
+        <i class="fas fa-check-circle me-2"></i>
+        Complaint submitted successfully! Your Complaint ID: <strong id="newComplaintId"></strong>
+        <br/><small>You can track your complaint using this ID.</small>
+      </div>
+
+      <form id="complaintForm" novalidate>
+        <div class="form-section-title"><i class="fas fa-user me-2"></i>Personal Information</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Citizen Name *</label>
+            <input type="text" class="form-control" id="fc_name" placeholder="Full name" required/>
+            <div class="invalid-feedback">Please enter your name.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Mobile Number *</label>
+            <input type="tel" class="form-control" id="fc_mobile" placeholder="10-digit mobile number" required/>
+            <div class="invalid-feedback">Please enter a valid mobile number.</div>
+          </div>
+        </div>
+
+        <div class="form-section-title"><i class="fas fa-file-alt me-2"></i>Complaint Details</div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-6">
+            <label class="form-label">Category *</label>
+            <select class="form-select" id="fc_category" required>
+              <option value="">-- Select Category --</option>
+              <option>Water Supply</option>
+              <option>Electricity</option>
+              <option>Roads</option>
+              <option>Drainage</option>
+              <option>Sanitation</option>
+              <option>Street Lights</option>
+              <option>Public Health</option>
+              <option>Others</option>
+            </select>
+            <div class="invalid-feedback">Please select a category.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Date *</label>
+            <input type="date" class="form-control" id="fc_date" required/>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Complaint Title *</label>
+            <input type="text" class="form-control" id="fc_title" placeholder="Brief title of the issue" required/>
+            <div class="invalid-feedback">Please enter a complaint title.</div>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Location *</label>
+            <input type="text" class="form-control" id="fc_location" placeholder="Street, Ward, Landmark" required/>
+            <div class="invalid-feedback">Please enter the location.</div>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Complaint Description *</label>
+            <textarea class="form-control" id="fc_description" rows="4" placeholder="Describe the issue in detail..." required></textarea>
+            <div class="invalid-feedback">Please describe the complaint.</div>
+          </div>
+          <div class="col-md-12">
+            <label class="form-label">Upload Image (Optional)</label>
+            <div class="file-upload-zone" id="fileUploadZone" onclick="document.getElementById('fc_image').click()">
+              <i class="fas fa-cloud-upload-alt"></i>
+              <p>Click to upload or drag & drop</p>
+              <small>JPG, PNG up to 5MB</small>
+              <div id="fileUploadName" class="mt-2 text-success"></div>
+            </div>
+            <input type="file" id="fc_image" class="d-none" accept="image/*" onchange="handleFileUpload(this)"/>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-reset" onclick="resetComplaintForm()">
+            <i class="fas fa-redo me-2"></i>Reset
+          </button>
+          <button type="submit" class="btn btn-submit-complaint" onclick="submitComplaint(event)">
+            <i class="fas fa-paper-plane me-2"></i>Submit Complaint
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== MY COMPLAINTS SECTION ===== -->
+  <div class="dash-section d-none" id="sec-mycomplaints">
+    <div class="dash-page-header">
+      <div>
+        <h4 class="dash-page-title">My Complaints</h4>
+        <p class="dash-page-sub">All complaints registered by you.</p>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar mb-4">
+      <div class="row g-2 align-items-center">
+        <div class="col-md-4">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="searchInput" placeholder="Search complaints..." oninput="filterComplaints()"/>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="statusFilter" onchange="filterComplaints()">
+            <option value="">All Statuses</option>
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" id="categoryFilter" onchange="filterComplaints()">
+            <option value="">All Categories</option>
+            <option>Water Supply</option>
+            <option>Electricity</option>
+            <option>Roads</option>
+            <option>Drainage</option>
+            <option>Sanitation</option>
+            <option>Street Lights</option>
+            <option>Public Health</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-clear-filter w-100" onclick="clearFilters()">
+            <i class="fas fa-times me-1"></i>Clear
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-panel">
+      <div class="panel-header">
+        <h5><i class="fas fa-list me-2"></i>Complaint Records</h5>
+        <span class="total-badge" id="complaintCount">0 complaints</span>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table dash-table" id="complaintsTable">
+            <thead>
+              <tr>
+                <th>Complaint ID</th>
+                <th>Category</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Remarks</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="myComplaintsBody">
+              <tr><td colspan="8" class="text-center py-5">
+                <i class="fas fa-inbox fa-2x text-muted mb-2 d-block"></i>
+                No complaints found
+              </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TRACK SECTION ===== -->
+  <div class="dash-section d-none" id="sec-track">
+    <div class="dash-page-header">
+      <h4 class="dash-page-title">Track Complaint</h4>
+    </div>
+    <div class="form-panel">
+      <div class="mb-4">
+        <label class="form-label">Enter Complaint ID</label>
+        <div class="input-group">
+          <span class="input-group-text"><i class="fas fa-hashtag"></i></span>
+          <input type="text" class="form-control" id="trackIdInput" placeholder="e.g. GRV-2024-0001"/>
+          <button class="btn btn-primary" onclick="trackComplaintById()">
+            <i class="fas fa-search me-1"></i>Track
+          </button>
+        </div>
+      </div>
+      <div id="trackResultArea"></div>
+    </div>
+  </div>
+
+  <!-- ===== PROFILE SECTION ===== -->
+  <div class="dash-section d-none" id="sec-profile">
+    <div class="dash-page-header">
+      <h4 class="dash-page-title">My Profile</h4>
+    </div>
+    <div class="form-panel">
+      <div class="profile-header-block">
+        <div class="profile-avatar-big">
+          <i class="fas fa-user-circle"></i>
+        </div>
+        <div class="profile-header-info">
+          <h5 id="profileName">Citizen Name</h5>
+          <p id="profileMobile">Mobile: ——</p>
+          <span class="badge bg-success">Verified Citizen</span>
+        </div>
+      </div>
+      <hr/>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="profileNameInput"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Mobile Number</label>
+          <input type="tel" class="form-control" id="profileMobileInput"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="profileEmail" placeholder="Optional"/>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Ward / Village</label>
+          <input type="text" class="form-control" id="profileWard" placeholder="Your ward/village name"/>
+        </div>
+        <div class="col-md-12">
+          <label class="form-label">Address</label>
+          <textarea class="form-control" id="profileAddress" rows="2" placeholder="Your full address"></textarea>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-submit-complaint" onclick="saveProfile()">
+            <i class="fas fa-save me-2"></i>Save Profile
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPLAINT DETAIL MODAL ===== -->
+<div class="modal fade" id="complaintDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--primary-dark);color:#fff">
+        <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Complaint Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="complaintDetailBody"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/citizen.js"></script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reports & Analytics — Smart Grievance System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/reports.css"/>
+</head>
+<body class="dashboard-body">
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><i class="fas fa-landmark"></i></div>
+    <div class="sidebar-title">
+      <span class="sidebar-portal">Grievance Portal</span>
+      <span class="sidebar-role" id="complaintsRoleLabel">Panel</span>
+    </div>
+    <button class="sidebar-close d-lg-none" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  </div>
+  <div class="sidebar-profile">
+    <div class="sidebar-avatar" id="complaintsAvatarIcon">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="complaintsSidebarName">User</div>
+      <div class="sidebar-user-id"   id="complaintsSidebarSub">——</div>
+    </div>
+  </div>
+  <nav class="sidebar-nav" id="complaintsSidebarNav"><!-- filled by JS --></nav>
+  <div class="sidebar-footer">
+    <small>Smart Grievance System v1.0</small><br/>
+    <small>Govt. of Andhra Pradesh</small>
+  </div>
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content" id="mainContent">
+
+  <!-- Top Navbar -->
+  <div class="dash-topbar">
+    <div class="topbar-left">
+      <button class="topbar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-breadcrumb">Reports &amp; Analytics</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-datetime" id="complaintsDatetime"></div>
+      <button class="topbar-btn theme-toggle-btn" id="themeToggle4">
+        <i class="fas fa-moon" id="themeIcon4"></i>
+      </button>
+      <div class="topbar-user-chip" id="complaintsUserChip">
+        <i class="fas fa-user-circle"></i>
+        <span id="complaintsTopbarUser">User</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-section">
+
+    <!-- HERO BANNER -->
+    <div class="report-hero-banner" id="reportHeroBanner">
+      <div>
+        <p class="report-hero-title"><i class="fas fa-chart-line me-2"></i>Analytics Report</p>
+        <p class="report-hero-sub">Loading data…</p>
+      </div>
+    </div>
+
+    <!-- DATE RANGE FILTER BAR -->
+    <div class="date-range-bar mb-4">
+      <span class="dr-label"><i class="fas fa-filter me-1"></i>Filter:</span>
+      <input type="date" class="form-control" id="filterFrom" placeholder="From date"/>
+      <input type="date" class="form-control" id="filterTo"   placeholder="To date"/>
+      <select class="form-select" id="filterDept">
+        <option value="">All Categories</option>
+        <option>Water Supply</option>
+        <option>Electricity</option>
+        <option>Roads</option>
+        <option>Drainage</option>
+        <option>Sanitation</option>
+        <option>Street Lights</option>
+        <option>Public Health</option>
+        <option>Others</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="applyDateFilter()">
+        <i class="fas fa-search me-1"></i>Apply
+      </button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="clearDateFilter()">
+        <i class="fas fa-times me-1"></i>Clear
+      </button>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-3 mb-4" id="reportKPICards">
+      <!-- filled by JS -->
+    </div>
+
+    <!-- CATEGORY BREAKDOWN GRID -->
+    <div class="dash-panel mb-4">
+      <div class="panel-header">
+        <h6 class="panel-title"><i class="fas fa-th me-2"></i>Category Breakdown</h6>
+      </div>
+      <div class="panel-body">
+        <div class="cat-breakdown-grid" id="catBreakdownGrid"><!-- filled by JS --></div>
+      </div>
+    </div>
+
+    <!-- REPORT TABS -->
+    <div class="report-tabs mb-0">
+      <button class="report-tab-btn active" data-tab="overview"  onclick="switchReportTab('overview')">
+        <i class="fas fa-chart-pie"></i> Overview Charts
+      </button>
+      <button class="report-tab-btn" data-tab="table"    onclick="switchReportTab('table')">
+        <i class="fas fa-table"></i> Category Table
+      </button>
+      <button class="report-tab-btn" data-tab="recent"   onclick="switchReportTab('recent')">
+        <i class="fas fa-clock"></i> Recent Complaints
+      </button>
+    </div>
+
+    <!-- TAB: OVERVIEW CHARTS -->
+    <div class="report-tab-content active" id="tab-overview">
+      <div class="row g-4 mt-1">
+
+        <!-- Status Pie -->
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="dash-panel h-100">
+            <div class="panel-header">
+              <h6 class="panel-title"><i class="fas fa-chart-pie me-2"></i>Status Distribution</h6>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap">
+                <canvas id="statusPieChart" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resolution Doughnut -->
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="dash-panel h-100">
+            <div class="panel-header">
+              <h6 class="panel-title"><i class="fas fa-check-circle me-2"></i>Resolution Rate</h6>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap">
+                <canvas id="resolutionDoughnut" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Bar -->
+        <div class="col-12 col-xl-4">
+          <div class="dash-panel h-100">
+            <div class="panel-header">
+              <h6 class="panel-title"><i class="fas fa-chart-bar me-2"></i>By Category</h6>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap">
+                <canvas id="categoryBarChart" height="260"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trend Line -->
+        <div class="col-12">
+          <div class="dash-panel">
+            <div class="panel-header">
+              <h6 class="panel-title"><i class="fas fa-chart-line me-2"></i>Monthly Trend (Last 6 Months)</h6>
+            </div>
+            <div class="panel-body">
+              <div class="chart-wrap">
+                <canvas id="trendLineChart" height="100"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /tab-overview -->
+
+    <!-- TAB: CATEGORY TABLE -->
+    <div class="report-tab-content" id="tab-table">
+      <div class="dash-panel mt-3">
+        <div class="panel-header">
+          <h6 class="panel-title"><i class="fas fa-table me-2"></i>Category-wise Summary</h6>
+          <button class="btn-export-csv" onclick="exportCSV()">
+            <i class="fas fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="report-data-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th class="text-center">Total</th>
+                  <th class="text-center">Pending</th>
+                  <th class="text-center">Resolved</th>
+                  <th>Progress / Rate</th>
+                </tr>
+              </thead>
+              <tbody id="categoryTableBody">
+                <tr><td colspan="5" class="text-center text-muted py-3">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-table -->
+
+    <!-- TAB: RECENT COMPLAINTS -->
+    <div class="report-tab-content" id="tab-recent">
+      <div class="dash-panel mt-3">
+        <div class="panel-header">
+          <h6 class="panel-title"><i class="fas fa-clock me-2"></i>Recent 10 Complaints</h6>
+        </div>
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="report-data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Category</th>
+                  <th>Title</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentComplaintsBody">
+                <tr><td colspan="6" class="text-center text-muted py-3">Loading…</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div><!-- /tab-recent -->
+
+  </div><!-- /.dash-section -->
+</div><!-- /.main-content -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/reports.js"></script>
+</body>
+</html>

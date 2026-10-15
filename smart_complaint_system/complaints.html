@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complaints Management — Smart Grievance System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/complaints.css"/>
+</head>
+<body class="dashboard-body">
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo"><i class="fas fa-landmark"></i></div>
+    <div class="sidebar-title">
+      <span class="sidebar-portal">Grievance Portal</span>
+      <span class="sidebar-role" id="complaintsRoleLabel">Panel</span>
+    </div>
+    <button class="sidebar-close d-lg-none" onclick="toggleSidebar()"><i class="fas fa-times"></i></button>
+  </div>
+
+  <div class="sidebar-profile">
+    <div class="sidebar-avatar" id="complaintsAvatarIcon">
+      <i class="fas fa-user-circle"></i>
+    </div>
+    <div class="sidebar-user-info">
+      <div class="sidebar-user-name" id="complaintsSidebarName">User</div>
+      <div class="sidebar-user-id" id="complaintsSidebarSub">——</div>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" id="complaintsSidebarNav">
+    <!-- filled by JS based on role -->
+  </nav>
+  <div class="sidebar-footer">
+    <small>Smart Grievance System v1.0</small><br/>
+    <small>Govt. of Andhra Pradesh</small>
+  </div>
+</aside>
+
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+<div class="main-content" id="mainContent">
+  <!-- Top Navbar -->
+  <div class="dash-topbar">
+    <div class="topbar-left">
+      <button class="topbar-toggle" onclick="toggleSidebar()"><i class="fas fa-bars"></i></button>
+      <div class="topbar-breadcrumb">Complaint Management</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-datetime" id="complaintsDatetime"></div>
+      <button class="topbar-btn theme-toggle-btn" id="themeToggle4">
+        <i class="fas fa-moon" id="themeIcon4"></i>
+      </button>
+      <div class="topbar-user-chip" id="complaintsUserChip">
+        <i class="fas fa-user-circle"></i>
+        <span id="complaintsTopbarUser">User</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="dash-section" id="sec-complaints-main">
+
+    <!-- Header + Action Bar -->
+    <div class="complaints-header">
+      <div class="ch-left">
+        <h4 class="dash-page-title">
+          <i class="fas fa-clipboard-list me-2"></i>
+          <span id="complaintsPageTitle">Complaints</span>
+        </h4>
+        <p class="dash-page-sub" id="complaintsPageSub">Manage and track all complaints</p>
+      </div>
+      <div class="ch-right" id="citizenComplaintActions">
+        <button class="btn btn-raise-complaint" onclick="navigateToRaise()">
+          <i class="fas fa-plus me-2"></i>Raise Complaint
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Mini Cards -->
+    <div class="mini-stats-row mb-4" id="complaintMiniStats">
+      <div class="mini-stat blue"><span id="cs_total">0</span><label>Total</label></div>
+      <div class="mini-stat red"><span id="cs_pending">0</span><label>Pending</label></div>
+      <div class="mini-stat yellow"><span id="cs_progress">0</span><label>In Progress</label></div>
+      <div class="mini-stat green"><span id="cs_resolved">0</span><label>Resolved</label></div>
+    </div>
+
+    <!-- Advanced Filter Bar -->
+    <div class="advanced-filter-bar mb-4">
+      <div class="filter-bar-inner">
+        <div class="filter-group">
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <input type="text" class="form-control" id="advSearchInput" placeholder="Search by ID, name, location, title..." oninput="applyAdvancedFilters()"/>
+          </div>
+        </div>
+        <div class="filter-group">
+          <select class="form-select" id="advStatusFilter" onchange="applyAdvancedFilters()">
+            <option value="">All Statuses</option>
+            <option value="Pending">🔴 Pending</option>
+            <option value="In Progress">🟡 In Progress</option>
+            <option value="Resolved">🟢 Resolved</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <select class="form-select" id="advCategoryFilter" onchange="applyAdvancedFilters()">
+            <option value="">All Categories</option>
+            <option>Water Supply</option>
+            <option>Electricity</option>
+            <option>Roads</option>
+            <option>Drainage</option>
+            <option>Sanitation</option>
+            <option>Street Lights</option>
+            <option>Public Health</option>
+            <option>Others</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <select class="form-select" id="advSortFilter" onchange="applyAdvancedFilters()">
+            <option value="date-desc">Latest First</option>
+            <option value="date-asc">Oldest First</option>
+            <option value="status">By Status</option>
+            <option value="category">By Category</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <button class="btn btn-clear-filter" onclick="clearAdvancedFilters()">
+            <i class="fas fa-times me-1"></i>Clear All
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toggle: Table / Card View -->
+    <div class="view-toggle mb-3">
+      <div class="view-toggle-inner">
+        <button class="vt-btn active" id="tableViewBtn" onclick="switchView('table')">
+          <i class="fas fa-table me-1"></i>Table View
+        </button>
+        <button class="vt-btn" id="cardViewBtn" onclick="switchView('card')">
+          <i class="fas fa-th-large me-1"></i>Card View
+        </button>
+      </div>
+      <div class="result-count">
+        Showing <strong id="showingCount">0</strong> of <strong id="totalComplaintsCount">0</strong> complaints
+      </div>
+    </div>
+
+    <!-- TABLE VIEW -->
+    <div id="tableView">
+      <div class="dash-panel">
+        <div class="panel-body">
+          <div class="table-responsive">
+            <table class="table dash-table complaints-full-table" id="fullComplaintsTable">
+              <thead>
+                <tr>
+                  <th>Complaint ID</th>
+                  <th>Category</th>
+                  <th>Citizen Name</th>
+                  <th>Title</th>
+                  <th>Location</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Remarks</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="fullComplaintsBody">
+                <tr><td colspan="9" class="text-center py-5">
+                  <i class="fas fa-clipboard fa-3x text-muted mb-3 d-block"></i>
+                  <span class="text-muted">No complaints to display</span>
+                </td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD VIEW -->
+    <div id="cardView" class="d-none">
+      <div class="row g-3" id="complaintCardsGrid">
+        <!-- filled by JS -->
+      </div>
+    </div>
+
+    <!-- PAGINATION -->
+    <div class="pagination-bar mt-4" id="paginationBar">
+      <div class="pagination-info" id="pageInfo">Page 1 of 1</div>
+      <div class="pagination-btns">
+        <button class="page-btn" id="prevPageBtn" onclick="changePage(-1)">
+          <i class="fas fa-chevron-left me-1"></i>Prev
+        </button>
+        <div class="page-numbers" id="pageNumbers"></div>
+        <button class="page-btn" id="nextPageBtn" onclick="changePage(1)">
+          Next <i class="fas fa-chevron-right ms-1"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPLAINT DETAIL MODAL ===== -->
+<div class="modal fade" id="complaintDetailModal" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header complaint-detail-header">
+        <h5 class="modal-title">
+          <i class="fas fa-file-alt me-2"></i>
+          Complaint Details — <span id="detailModalId"></span>
+        </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="complaintDetailBody">
+        <!-- filled by JS -->
+      </div>
+      <div class="modal-footer" id="complaintDetailFooter">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADD REMARKS MODAL ===== -->
+<div class="modal fade" id="remarksModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header" style="background:var(--primary-dark);color:#fff">
+        <h5 class="modal-title"><i class="fas fa-comment-dots me-2"></i>Add Remarks</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p>Complaint ID: <strong id="remarksComplaintId"></strong></p>
+        <div class="mb-3">
+          <label class="form-label">Status Update</label>
+          <select class="form-select" id="remarksStatusSelect">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Officer Remarks</label>
+          <textarea class="form-control" id="remarksTextarea" rows="4" placeholder="Add remarks or updates about this complaint..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-primary" onclick="saveRemarks()">
+          <i class="fas fa-save me-1"></i>Save Remarks
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/complaints.js"></script>
+</body>
+</html>
